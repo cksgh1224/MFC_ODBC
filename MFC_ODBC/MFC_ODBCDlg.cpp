@@ -31,6 +31,11 @@ void CMFCODBCDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CMFCODBCDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_Login_btn, &CMFCODBCDlg::OnBnClickedLoginbtn)
+	ON_BN_CLICKED(IDC_CreateAccount_btn, &CMFCODBCDlg::OnBnClickedCreateaccountbtn)
+	ON_BN_CLICKED(IDC_FindID_btn, &CMFCODBCDlg::OnBnClickedFindidbtn)
+	ON_BN_CLICKED(IDC_FindPW_btn, &CMFCODBCDlg::OnBnClickedFindpwbtn)
+	ON_BN_CLICKED(IDC_AllSelect_btn, &CMFCODBCDlg::OnBnClickedAllselectbtn)
 END_MESSAGE_MAP()
 
 
@@ -45,7 +50,15 @@ BOOL CMFCODBCDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
-	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	// mysql 서버 연결
+	if (my_odbc.Connect(L"socket_user", L"root", L"0000", this))
+	{
+		MessageBox(L"서버 접송 성공", L"MySql", MB_OK);
+	}
+	else
+	{
+		MessageBox(L"서버 접송 ", L"MySql", MB_OK);
+	}
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -86,3 +99,57 @@ HCURSOR CMFCODBCDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+
+
+
+// 로그인 버튼 클릭
+void CMFCODBCDlg::OnBnClickedLoginbtn()
+{
+	CString id, pw, query;
+	GetDlgItemText(IDC_ID_EDIT, id);
+	GetDlgItemText(IDC_PW_EDIT, pw);
+
+	query.Format(L" select mid, mpw, mname from user where mid='%s' and mpw='%s' ", id, pw);
+	MessageBox(query, NULL, MB_OK);
+
+	if (my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord))
+	{
+		MessageBox(L"로그인 성공", NULL, MB_OK);
+	}
+	else
+	{
+		MessageBox(L"로그인 실패", NULL, MB_OK);
+	}
+
+}
+
+
+// 회원가입 버튼 클릭
+void CMFCODBCDlg::OnBnClickedCreateaccountbtn()
+{
+	
+}
+
+
+// 아이디 찾기 버튼 클릭
+void CMFCODBCDlg::OnBnClickedFindidbtn()
+{
+	
+}
+
+
+// 비밀번호 찾기 버튼 클릭
+void CMFCODBCDlg::OnBnClickedFindpwbtn()
+{
+	
+}
+
+
+// 전체 사용자 버튼 클릭
+void CMFCODBCDlg::OnBnClickedAllselectbtn()
+{
+	CString query = L" select mid, mpw, mname from user ";
+	my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord);
+}

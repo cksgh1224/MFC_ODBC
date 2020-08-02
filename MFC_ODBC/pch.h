@@ -10,4 +10,37 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 
+
+#include "MyOdbc.h"
+
+
+class User
+{
+private:
+	wchar_t id[20];
+	wchar_t pw[20];
+	wchar_t name[20];
+
+public:
+	wchar_t* GetID() { return id; }
+	wchar_t* GetPW() { return pw; }
+	wchar_t* GetName() { return name; }
+	void SetID(wchar_t* ap_id) { wcscpy(id, ap_id); }
+	void SetPW(wchar_t* ap_pw) { wcscpy(pw, ap_pw); }
+	void SetName(wchar_t* ap_name) { wcscpy(name, ap_name); }
+};
+
+
+// Query의 결과에 해당하는 데이터를 User 객체와 연결하기 위한 코드 구성
+void SetRecordInfo(void* ap_owner, HSTMT ah_statement, void* ap_data);
+
+// SQL 명령문에 의해서 가져온 데이터들을 자신이 원하는 형태로 변환하거나 저장하는 작업
+// ap_owner: 윈도우 핸들, ap_data: 읽은 데이터, a_step_index: 0부터 시작해서 데이터를 하나 읽을때마다 1씩 증가
+// a_count: 읽은 데이터 개수, ap_state: 읽어온 데이터의 상태, option: 검색 조건
+int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count, unsigned short* ap_state);
+
+
+
+
+
 #endif //PCH_H
