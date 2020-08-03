@@ -26,23 +26,8 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 {
 	int result = 0; // 성공: 1반환
 	
-
 	CString str;
 	User* p = (User*)ap_data;
-
-	/*for (ULONG i = 0; i < a_count; i++)
-	{
-		if (ap_state[i] != SQL_ROW_DELETED && ap_state[i] != SQL_ROW_ERROR)
-		{
-			str.Format(L"ID: %s\nPW:%s\nName:%s", p->GetID(), p->GetPW(), p->GetName());
-			MessageBox(NULL, str, L"사용자", MB_OK);
-			result = 1;
-		}
-		p++;
-		ap_state++;
-	}*/
-
-	
 
 	// 전체 사용자 검색
 	if (option == 0)
@@ -100,6 +85,25 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 			{
 				str.Format(L"%s님의 비밀번호: %s", p->GetName(), p->GetPW());
+				MessageBox(NULL, str, NULL, MB_OK);
+				result = 1;
+			}
+			else
+			{
+				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
+			}
+		}
+	}
+
+	// 아이디 중복확인
+	else if (option == 4)
+	{
+		if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
+		{
+			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
+			{
+				// 입력한 아이디가 검색이 됬으면 (db데이터에 있으면 -> 이미 있는 아이디 -> 아이디 사용 불가)
+				str.Format(L"%s 는 사용할수 없는 아이디 입니다", p->GetID());
 				MessageBox(NULL, str, NULL, MB_OK);
 				result = 1;
 			}

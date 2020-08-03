@@ -7,6 +7,7 @@ class CreateAccountDlg : public CDialogEx
 {
 private:
 	MyOdbc my_odbc;
+	bool id_check;
 
 	DECLARE_DYNAMIC(CreateAccountDlg)
 
@@ -26,4 +27,5 @@ protected:
 public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedCheckidbtn();
+	virtual BOOL OnInitDialog();
 };

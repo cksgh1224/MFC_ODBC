@@ -17,7 +17,7 @@
 #define IDC_AllSelect_btn               1006
 #define IDC_NAME_EDIT                   1008
 #define IDC_NICKNAME_EDIT               1010
-#define IDC_BUTTON1                     1012
+#define IDC_Create_btn                  1012
 #define IDC_CheckId_btn                 1014
 #define IDC_IPADDRESS_EDIT              1020
 
