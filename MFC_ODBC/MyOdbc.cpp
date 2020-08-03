@@ -126,9 +126,9 @@ int MyOdbc::ExecQuery(const wchar_t* ap_query)
 
 // 명령문 실행 (select) (검색된 데이터 처리) (성공: 1반환) 
 // a_record_size : 데이터 크기, a_record_count_per_step : 데이터를 가져오는 최대 단위
-int MyOdbc::ExecQuery(const wchar_t* ap_query, int a_record_size, SET_RECORD_INFO set_record_info, SQL_RESULT_RECORD sql_result_record, int a_record_count_per_step)
+int MyOdbc::ExecQuery(const wchar_t* ap_query, int a_record_size, SET_RECORD_INFO set_record_info, SQL_RESULT_RECORD sql_result_record, int option, int a_record_count_per_step)
 {
-	int result = 0, index = 0; // result: 성공/실패 반환값, index: 읽은 총 데이터 개수	
+	int result = 0, index = 0; // result: 명령문 성공/실패, 데이터 검색 결과에 대한 반환값.  index: 읽은 총 데이터 개수	
 
 	unsigned short* p_state = new unsigned short[a_record_count_per_step]; // 읽어온 데이터의 상태를 기록할 변수
 
@@ -175,21 +175,31 @@ int MyOdbc::ExecQuery(const wchar_t* ap_query, int a_record_size, SET_RECORD_INF
 		RETCODE ret = SQLExecDirect(h_statement, (SQLWCHAR*)(const wchar_t*)ap_query, SQL_NTS);
 		if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
 		{
+			result = 1; // 명령문 실행 성공
+
 			// 결과 집합에서 지정 된 행 집합을 반환, 바인딩된 열이 있으면 해당 열에 있는 데이터를 반환
 			while (SQLFetchScroll(h_statement, SQL_FETCH_NEXT, 0) != SQL_NO_DATA)
 			{
 				// SQLFetchScroll이 성공하면 record_num은 1이된다 (마지막에 더이상 데이터가 검색되지 않으면 0) (1보다 큰 숫자 안나옴, 전체 데이터 갯수 확인 불가..?)
-				(*sql_result_record)(mp_owner, index, p_data, record_num, p_state);
+				(*sql_result_record)(mp_owner, index, p_data, record_num, p_state, option);
 				index++;
 			}
-			result = 1; // 명령문 실행 성공
 		}
 		else MessageBox(NULL, L"명령문 실행 실패", NULL, MB_OK);
 
 		// Query 문을 위해 할당할 메모리 해제
 		SQLFreeHandle(SQL_HANDLE_STMT, h_statement);
 	}
-
+	else
+	{
+		MessageBox(NULL, L"Query 문을 위한 메모리 할당 실패", NULL, MB_OK);
+	}
+	
+	// index가 0이면 읽은 데이터가 없는거
+	if (index == 0)
+	{
+		result = 0; // 검색된 데이터가 없음
+	}
 
 	delete[] p_data;
 	delete[] p_state;

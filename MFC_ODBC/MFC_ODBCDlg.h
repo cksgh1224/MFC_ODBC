@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include "FindIdDlg.h"
+#include "FindPwDlg.h"
+#include "CreateAccountDlg.h"
 
 // CMFCODBCDlg 대화 상자
 class CMFCODBCDlg : public CDialogEx
@@ -40,4 +43,5 @@ public:
 	afx_msg void OnBnClickedFindidbtn();
 	afx_msg void OnBnClickedFindpwbtn();
 	afx_msg void OnBnClickedAllselectbtn();
+	afx_msg void OnDestroy();
 };

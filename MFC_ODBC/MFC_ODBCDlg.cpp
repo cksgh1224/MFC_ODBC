@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CMFCODBCDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_FindID_btn, &CMFCODBCDlg::OnBnClickedFindidbtn)
 	ON_BN_CLICKED(IDC_FindPW_btn, &CMFCODBCDlg::OnBnClickedFindpwbtn)
 	ON_BN_CLICKED(IDC_AllSelect_btn, &CMFCODBCDlg::OnBnClickedAllselectbtn)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -53,11 +54,11 @@ BOOL CMFCODBCDlg::OnInitDialog()
 	// mysql 서버 연결
 	if (my_odbc.Connect(L"socket_user", L"root", L"0000", this))
 	{
-		MessageBox(L"서버 접송 성공", L"MySql", MB_OK);
+		//MessageBox(L"서버 접송 성공", L"MySql", MB_OK);
 	}
 	else
 	{
-		MessageBox(L"서버 접송 ", L"MySql", MB_OK);
+		MessageBox(L"서버 접송 실패", L"MySql", MB_OK);
 	}
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -101,6 +102,14 @@ HCURSOR CMFCODBCDlg::OnQueryDragIcon()
 
 
 
+// 다이얼로그가 종료될때 서버접속도 해제한다
+void CMFCODBCDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	my_odbc.Disconnect();
+}
+
 
 
 
@@ -112,38 +121,32 @@ void CMFCODBCDlg::OnBnClickedLoginbtn()
 	GetDlgItemText(IDC_PW_EDIT, pw);
 
 	query.Format(L" select mid, mpw, mname from user where mid='%s' and mpw='%s' ", id, pw);
-	MessageBox(query, NULL, MB_OK);
-
-	if (my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord))
+	
+	if (my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord, 1))
 	{
-		MessageBox(L"로그인 성공", NULL, MB_OK);
+		
 	}
 	else
 	{
-		MessageBox(L"로그인 실패", NULL, MB_OK);
+		MessageBox(L"입력하신 정보가 일치하지 않습니다", NULL, MB_OK);
 	}
 
-}
-
-
-// 회원가입 버튼 클릭
-void CMFCODBCDlg::OnBnClickedCreateaccountbtn()
-{
-	
 }
 
 
 // 아이디 찾기 버튼 클릭
 void CMFCODBCDlg::OnBnClickedFindidbtn()
 {
-	
+	FindIdDlg findIdDlg(my_odbc);
+	findIdDlg.DoModal();
 }
 
 
 // 비밀번호 찾기 버튼 클릭
 void CMFCODBCDlg::OnBnClickedFindpwbtn()
 {
-	
+	FindPwDlg findPwDlg(my_odbc);
+	findPwDlg.DoModal();
 }
 
 
@@ -151,5 +154,14 @@ void CMFCODBCDlg::OnBnClickedFindpwbtn()
 void CMFCODBCDlg::OnBnClickedAllselectbtn()
 {
 	CString query = L" select mid, mpw, mname from user ";
-	my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord);
+	my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord, 0);
+}
+
+
+
+// 회원가입 버튼 클릭
+void CMFCODBCDlg::OnBnClickedCreateaccountbtn()
+{
+	CreateAccountDlg createAccountDlg(my_odbc);
+	createAccountDlg.DoModal();
 }

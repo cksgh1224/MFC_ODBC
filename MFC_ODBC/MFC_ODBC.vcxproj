@@ -183,6 +183,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CreateAccountDlg.h" />
+    <ClInclude Include="FindIdDlg.h" />
+    <ClInclude Include="FindPwDlg.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MFC_ODBC.h" />
     <ClInclude Include="MFC_ODBCDlg.h" />
@@ -192,6 +195,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateAccountDlg.cpp" />
+    <ClCompile Include="FindIdDlg.cpp" />
+    <ClCompile Include="FindPwDlg.cpp" />
     <ClCompile Include="MFC_ODBC.cpp" />
     <ClCompile Include="MFC_ODBCDlg.cpp" />
     <ClCompile Include="MyOdbc.cpp" />

@@ -22,7 +22,7 @@ void SetRecordInfo(void* ap_owner, HSTMT ah_statement, void* ap_data)
 // SQL 명령문에 의해서 가져온 데이터들을 자신이 원하는 형태로 변환하거나 저장하는 작업
 // ap_owner: 윈도우 핸들, ap_data: 읽은 데이터, a_step_index: 0부터 시작해서 데이터를 하나 읽을때마다 1씩 증가
 // a_count: 읽은 데이터 개수, ap_state: 읽어온 데이터의 상태, option: 검색 조건
-int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count, unsigned short* ap_state)
+int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count, unsigned short* ap_state, int option)
 {
 	int result = 0; // 성공: 1반환
 	
@@ -30,7 +30,7 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 	CString str;
 	User* p = (User*)ap_data;
 
-	for (ULONG i = 0; i < a_count; i++)
+	/*for (ULONG i = 0; i < a_count; i++)
 	{
 		if (ap_state[i] != SQL_ROW_DELETED && ap_state[i] != SQL_ROW_ERROR)
 		{
@@ -40,10 +40,10 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 		}
 		p++;
 		ap_state++;
-	}
+	}*/
 
+	
 
-	int option = -1;
 	// 전체 사용자 검색
 	if (option == 0)
 	{
@@ -52,7 +52,7 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 			if (ap_state[i] != SQL_ROW_DELETED && ap_state[i] != SQL_ROW_ERROR)
 			{
 				str.Format(L"ID: %s\nPW:%s\nName:%s", p->GetID(), p->GetPW(), p->GetName());
-				MessageBox(NULL, str, NULL, MB_OK);
+				MessageBox(NULL, str, L"사용자", MB_OK);
 				result = 1;
 			}
 			p++;
@@ -65,12 +65,12 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 	{
 		if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 		{
-			MessageBox(NULL, L"로그인 성공!", NULL, MB_OK);
+			MessageBox(NULL, L"로그인 성공", NULL, MB_OK);
 			result = 1;
 		}
 		else
 		{
-			MessageBox(NULL, L"로그인 실패!", NULL, MB_OK);
+			MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
 		}
 	}
 
@@ -81,13 +81,13 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 		{
 			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 			{
-				str.Format(L"ID: %s", p->GetID());
+				str.Format(L"%s님의 아이디: %s", p->GetName(), p->GetID());
 				MessageBox(NULL, str, NULL, MB_OK);
 				result = 1;
 			}
 			else
 			{
-				MessageBox(NULL, L"입력하신 정보가 일치하지 않습니다!", NULL, MB_OK);
+				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
 			}
 		}
 	}
@@ -99,13 +99,13 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 		{
 			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 			{
-				str.Format(L"PW: %s", p->GetPW());
+				str.Format(L"%s님의 비밀번호: %s", p->GetName(), p->GetPW());
 				MessageBox(NULL, str, NULL, MB_OK);
 				result = 1;
 			}
 			else
 			{
-				MessageBox(NULL, L"입력하신 정보가 일치하지 않습니다!", NULL, MB_OK);
+				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
 			}
 		}
 	}

@@ -26,7 +26,7 @@
 // SQL_RESULT_RECORD  : SQL 명령문에 의해서 가져온 데이터들을 자신이 원하는 형태로 변환하거나 저장,처리하는 작업
 // 실제로 호출되는 함수는 실제로 작업을 하는(이 클래스를 사용하는) cpp 파일에 선언해서 사용
 typedef void(*SET_RECORD_INFO)(void* ap_owner, HSTMT ah_statement, void* ap_data);
-typedef int(*SQL_RESULT_RECORD)(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count, unsigned short* ap_state);
+typedef int(*SQL_RESULT_RECORD)(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count, unsigned short* ap_state, int option);
 
 
 
@@ -63,7 +63,7 @@ public:
 	// a_record_size : sizeof(데이터), a_record_count_per_step : 데이터를 가져오는 최대 단위
 	// set_record_info, sql_result_record : typedef 함수 포인터
 	int ExecQuery(const wchar_t* ap_query, int a_record_size, SET_RECORD_INFO set_record_info, SQL_RESULT_RECORD sql_result_record, 
-		int a_record_count_per_step = 100);
+		int option, int a_record_count_per_step = 100);
 	
 };
 
