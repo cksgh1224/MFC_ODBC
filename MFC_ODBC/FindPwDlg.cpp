@@ -14,7 +14,7 @@ IMPLEMENT_DYNAMIC(FindPwDlg, CDialogEx)
 FindPwDlg::FindPwDlg(MyOdbc odbc, CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_FINDPW_DIALOG, pParent)
 {
-	my_odbc = odbc;
+	my_odbc = odbc; // 객체 생성시 MyOdbc 객체를 인자로 받아 my_odbc에 대입한다
 }
 
 FindPwDlg::~FindPwDlg()
@@ -40,6 +40,12 @@ void FindPwDlg::OnBnClickedFindpwbtn()
 	CString id, ip, query;
 	GetDlgItemText(IDC_ID_EDIT, id);
 	GetDlgItemText(IDC_IP_EDIT, ip);
+
+	if (id == "" || ip == "")
+	{
+		MessageBox(L"아이디, IP주소를 입력해 주세요", NULL, MB_OK);
+		return;
+	}
 
 	query.Format(L" select mid, mpw, mname from user where mid='%s' and mip='%s' ", id, ip);
 	

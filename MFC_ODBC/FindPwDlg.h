@@ -11,7 +11,7 @@ private:
 	DECLARE_DYNAMIC(FindPwDlg)
 
 public:
-	FindPwDlg(MyOdbc odbc, CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	FindPwDlg(MyOdbc odbc, CWnd* pParent = nullptr); // 객체 생성시 MyOdbc 객체를 인자로 받아 my_odbc에 대입한다
 	virtual ~FindPwDlg();
 
 // 대화 상자 데이터입니다.

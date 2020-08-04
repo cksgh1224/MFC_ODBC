@@ -40,6 +40,11 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 				MessageBox(NULL, str, L"사용자", MB_OK);
 				result = 1;
 			}
+			else
+			{
+				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
+				result = 0;
+			}
 			p++;
 			ap_state++;
 		}
@@ -50,12 +55,13 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 	{
 		if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 		{
-			MessageBox(NULL, L"로그인 성공", NULL, MB_OK);
+			//MessageBox(NULL, L"로그인 성공", NULL, MB_OK);
 			result = 1;
 		}
 		else
 		{
 			MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
+			result = 0;
 		}
 	}
 
@@ -64,16 +70,14 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 	{
 		if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 		{
-			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
-			{
-				str.Format(L"%s님의 아이디: %s", p->GetName(), p->GetID());
-				MessageBox(NULL, str, NULL, MB_OK);
-				result = 1;
-			}
-			else
-			{
-				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
-			}
+			str.Format(L"%s님의 아이디: %s", p->GetName(), p->GetID());
+			MessageBox(NULL, str, NULL, MB_OK);
+			result = 1;
+		}
+		else
+		{
+			MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
+			result = 0;
 		}
 	}
 
@@ -82,16 +86,14 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 	{
 		if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 		{
-			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
-			{
-				str.Format(L"%s님의 비밀번호: %s", p->GetName(), p->GetPW());
-				MessageBox(NULL, str, NULL, MB_OK);
-				result = 1;
-			}
-			else
-			{
-				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
-			}
+			str.Format(L"%s님의 비밀번호: %s", p->GetName(), p->GetPW());
+			MessageBox(NULL, str, NULL, MB_OK);
+			result = 1;
+		}
+		else
+		{
+			MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
+			result = 0;
 		}
 	}
 
@@ -100,17 +102,15 @@ int ResultRecord(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count,
 	{
 		if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
 		{
-			if (ap_state[0] != SQL_ROW_DELETED && ap_state[0] != SQL_ROW_ERROR)
-			{
-				// 입력한 아이디가 검색이 됬으면 (db데이터에 있으면 -> 이미 있는 아이디 -> 아이디 사용 불가)
-				str.Format(L"%s 는 사용할수 없는 아이디 입니다", p->GetID());
-				MessageBox(NULL, str, NULL, MB_OK);
-				result = 1;
-			}
-			else
-			{
-				MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
-			}
+			// 입력한 아이디가 검색이 됬으면 (db데이터에 있으면 -> 이미 있는 아이디 -> 아이디 사용 불가)
+			//str.Format(L"%s 는 사용할수 없는 아이디 입니다", p->GetID());
+			//MessageBox(NULL, str, NULL, MB_OK);
+			result = 1;
+		}
+		else
+		{
+			MessageBox(NULL, L"ap_state[0] : SQL_ROW_DELETED or SQL_ROW_ERROR", NULL, MB_OK);
+			result = 0;
 		}
 	}
 

@@ -11,7 +11,8 @@ private:
 	DECLARE_DYNAMIC(FindIdDlg)
 
 public:
-	FindIdDlg(MyOdbc odbc, CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	FindIdDlg(MyOdbc odbc, CWnd* pParent = nullptr); // 객체 생성시 MyOdbc 객체를 인자로 받아 my_odbc에 대입한다
+	
 
 	virtual ~FindIdDlg();
 

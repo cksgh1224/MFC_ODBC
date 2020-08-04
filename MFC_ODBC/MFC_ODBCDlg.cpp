@@ -102,12 +102,12 @@ HCURSOR CMFCODBCDlg::OnQueryDragIcon()
 
 
 
-// 다이얼로그가 종료될때 서버접속도 해제한다
+// 다이얼로그가 종료될때 서버접속 해제
 void CMFCODBCDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	my_odbc.Disconnect();
+	my_odbc.Disconnect(); // 서버접속 해제
 }
 
 
@@ -117,14 +117,21 @@ void CMFCODBCDlg::OnDestroy()
 void CMFCODBCDlg::OnBnClickedLoginbtn()
 {
 	CString id, pw, query;
-	GetDlgItemText(IDC_ID_EDIT, id);
+	GetDlgItemText(IDC_ID_EDIT, id); // IDC_ID_EDIT에 입력된 텍스트를 id에 저장
 	GetDlgItemText(IDC_PW_EDIT, pw);
-
-	query.Format(L" select mid, mpw, mname from user where mid='%s' and mpw='%s' ", id, pw);
 	
-	if (my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord, 1))
+	if(id == "" || pw == "")
 	{
-		
+		MessageBox(L"아이디, 비밀번호를 입력해 주세요", NULL, MB_OK);
+		return;
+	}
+
+	query.Format(L" select mid, mpw, mname from user where mid='%s' and mpw='%s' ", id, pw); // CString::Format -> CString 문자열에 형식 지정자 사용
+	
+	if (my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord, 1)) // query 실행
+	{
+		// 로그인 성공
+		MessageBox(L"로그인 성공", NULL, MB_OK);
 	}
 	else
 	{
@@ -137,6 +144,7 @@ void CMFCODBCDlg::OnBnClickedLoginbtn()
 // 아이디 찾기 버튼 클릭
 void CMFCODBCDlg::OnBnClickedFindidbtn()
 {
+	// 새로운 다이얼로그 띄우기
 	FindIdDlg findIdDlg(my_odbc);
 	findIdDlg.DoModal();
 }

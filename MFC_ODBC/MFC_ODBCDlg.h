@@ -4,15 +4,17 @@
 
 #pragma once
 
-#include "FindIdDlg.h"
-#include "FindPwDlg.h"
-#include "CreateAccountDlg.h"
+
+#include "FindIdDlg.h"          // 아이디 찾기
+#include "FindPwDlg.h"          // 비밀번호 찾기
+#include "CreateAccountDlg.h"   // 회원가입
+
 
 // CMFCODBCDlg 대화 상자
 class CMFCODBCDlg : public CDialogEx
 {
 private:
-	MyOdbc my_odbc;
+	MyOdbc my_odbc; // ODBC를 사용하기 위한 객체
 	
 	
 // 생성입니다.

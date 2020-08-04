@@ -14,8 +14,8 @@ IMPLEMENT_DYNAMIC(CreateAccountDlg, CDialogEx)
 CreateAccountDlg::CreateAccountDlg(MyOdbc odbc, CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_CREATEACCOUNT_DIALOG, pParent)
 {
-	my_odbc = odbc;
-	id_check = false;
+	my_odbc = odbc;   // 객체 생성시 MyOdbc 객체를 인자로 받아 my_odbc에 대입한다
+	id_check = false; 
 }
 
 CreateAccountDlg::~CreateAccountDlg()
@@ -40,9 +40,8 @@ END_MESSAGE_MAP()
 BOOL CreateAccountDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-	// 버튼 비활성화
-	//GetDlgItem(IDC_Create_btn)->EnableWindow(FALSE);
+	
+	//
 
 	return TRUE;
 }
@@ -52,16 +51,12 @@ BOOL CreateAccountDlg::OnInitDialog()
 // 회원가입
 void CreateAccountDlg::OnBnClickedButton1()
 {
-	//MessageBox(L"회원가입", NULL, MB_OK);
-
-
 	if (!id_check) // 중복확인을 하지 않았으면
 	{
 		MessageBox(L"아이디 중복확인을 해주세요", NULL, MB_OK);
 		return;
 	}
-
-
+	
 	CString id, pw, name, nickname, ip, query;
 	GetDlgItemText(IDC_ID_EDIT, id);
 	GetDlgItemText(IDC_PW_EDIT, pw);
@@ -77,8 +72,6 @@ void CreateAccountDlg::OnBnClickedButton1()
 
 
 	query.Format(L" insert into user (mid,mpw,mname,mip,mnickname) values ('%s','%s','%s','%s','%s') ", id, pw, name, ip, nickname);
-	//MessageBox(query, NULL, MB_OK);
-
 
 	if (my_odbc.ExecQuery(query))
 	{
@@ -89,11 +82,12 @@ void CreateAccountDlg::OnBnClickedButton1()
 	{
 		MessageBox(L"회원가입 실패", NULL, MB_OK);
 	}
-
 }
 
 
 // 아이디 중복확인
+// 사용 가능한 아이디이면 id_check를 true로 바꾸고 IDC_ID_EDIT를 비활성화 시킨다, 중복확인 버튼의 텍스트를 다시입력으로 바꾼다
+// 다른 아이디를 사용하고 싶으면 다시입력 클릭 -> id_check를 false로 바꾸고 IDC_ID_EDIT를 활성화 시킨다, 다시입력 버튼의 텍스트를 중복확인으로 바꾼다
 void CreateAccountDlg::OnBnClickedCheckidbtn()
 {
 	CString id, query;
@@ -110,27 +104,25 @@ void CreateAccountDlg::OnBnClickedCheckidbtn()
 	{
 		id_check = false;
 		GetDlgItem(IDC_ID_EDIT)->EnableWindow(TRUE); // 버튼 활성화
-		GetDlgItem(IDC_ID_EDIT)->SetWindowTextW(L""); // 빈문자열로 초기화
-		GetDlgItem(IDC_CheckId_btn)->SetWindowTextW(L"중복확인"); // 대화상자 caption 변경
+		GetDlgItem(IDC_ID_EDIT)->SetWindowTextW(L""); // caption 변경 (빈문자열로 초기화)
+		GetDlgItem(IDC_CheckId_btn)->SetWindowTextW(L"중복확인"); 
 		return;
 	}
 
 	query.Format(L" select mid from user where mid='%s' ", id);
-	//MessageBox(query, NULL, MB_OK);
 
+	// ExecQuery가 성공 -> 입력한 아이디 검색 성공 -> 이미 있는 아이디 -> 아이디 사용 불가
 	if (!my_odbc.ExecQuery(query, sizeof(User), SetRecordInfo, ResultRecord, 4))
 	{
-		id += L" 사용 가능한 아이디 입니다";
-		MessageBox(id, NULL, MB_OK);
 		id_check = true;
-
+		MessageBox(id + L" 사용 가능한 아이디 입니다", NULL, MB_OK);
 		GetDlgItem(IDC_ID_EDIT)->EnableWindow(FALSE); // 버튼 비활성화
-
-		GetDlgItem(IDC_CheckId_btn)->SetWindowTextW(L"다시입력"); // 대화상자 caption 변경
+		GetDlgItem(IDC_CheckId_btn)->SetWindowTextW(L"다시입력"); // caption 변경
 	}
 	else
 	{
 		id_check = false;
+		MessageBox(id + L" 사용할 수 없는 아이디 입니다", NULL, MB_OK);
 	}
 
 }

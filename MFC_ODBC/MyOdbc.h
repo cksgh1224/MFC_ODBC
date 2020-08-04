@@ -22,9 +22,9 @@
 
 
 // typedef 함수 포인터 : 반환형(*함수이름)(매개변수)
-// SET_RECORD_INFO    : Query의 결과에 해당하는 데이터를 데이터를 담을 메모리(사용자 정의 객체)와 연결하기 위한 코드 구성
+// SET_RECORD_INFO    : Query의 결과에 해당하는 데이터를 담을 메모리(사용자 정의 객체)와 연결하기 위한 코드 구성
 // SQL_RESULT_RECORD  : SQL 명령문에 의해서 가져온 데이터들을 자신이 원하는 형태로 변환하거나 저장,처리하는 작업
-// 실제로 호출되는 함수는 실제로 작업을 하는(이 클래스를 사용하는) cpp 파일에 선언해서 사용
+// 실제로 호출되는 함수는 실제로 작업을 하는(MyOdbc를 사용하는) cpp 파일에 선언해서 사용
 typedef void(*SET_RECORD_INFO)(void* ap_owner, HSTMT ah_statement, void* ap_data);
 typedef int(*SQL_RESULT_RECORD)(void* ap_owner, int a_step_index, void* ap_data, ULONG a_count, unsigned short* ap_state, int option);
 
@@ -62,6 +62,7 @@ public:
 	// 명령문 실행 (select) (검색된 데이터 처리) (성공: 1반환)
 	// a_record_size : sizeof(데이터), a_record_count_per_step : 데이터를 가져오는 최대 단위
 	// set_record_info, sql_result_record : typedef 함수 포인터
+	// option: 0-전체 데이터 검색, 1-로그인, 2-아이디 찾기, 3-비밀번호 찾기, 4-아이디 중복확인
 	int ExecQuery(const wchar_t* ap_query, int a_record_size, SET_RECORD_INFO set_record_info, SQL_RESULT_RECORD sql_result_record, 
 		int option, int a_record_count_per_step = 100);
 	

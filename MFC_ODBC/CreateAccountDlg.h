@@ -6,13 +6,13 @@
 class CreateAccountDlg : public CDialogEx
 {
 private:
-	MyOdbc my_odbc;
-	bool id_check;
+	MyOdbc my_odbc; 
+	bool id_check;  // 사용 가능한 아이디인지 체크할 변수 (아이디 중복확인)
 
 	DECLARE_DYNAMIC(CreateAccountDlg)
 
 public:
-	CreateAccountDlg(MyOdbc odbc, CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	CreateAccountDlg(MyOdbc odbc, CWnd* pParent = nullptr); // 객체 생성시 MyOdbc 객체를 인자로 받아 my_odbc에 대입한다
 	virtual ~CreateAccountDlg();
 
 // 대화 상자 데이터입니다.
