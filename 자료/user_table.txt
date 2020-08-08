@@ -1,0 +1,11 @@
+CREATE TABLE `socket_db`.`user` (
+  `mid` VARCHAR(45) NOT NULL,
+  `mpw` VARCHAR(45) NOT NULL,
+  `mname` VARCHAR(45) NULL,
+  `mip` VARCHAR(45) NULL,
+  `mregdate` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `mnickname` VARCHAR(45) NULL,
+  PRIMARY KEY (`mid`, `mpw`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
